@@ -271,8 +271,8 @@ public class ControlerFoodTruck extends ControlerBase {
 								   estilo.append("<tr>");
 								   	   estilo.append("<th>#</th>");
 									   estilo.append("<th>Nome</th>");
-									   estilo.append("<th>Descrição</th>");
-									   estilo.append("<th>Preço</th>");
+									   estilo.append("<th>DescriÃ§Ã£o</th>");
+									   estilo.append("<th>PreÃ§o</th>");
 									   estilo.append("<th></th>");
 									   estilo.append("<th></th>");
 								   estilo.append("</tr>");

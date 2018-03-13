@@ -16,7 +16,7 @@ public class EmailHelper {
 			final String USERNAME = "foodtrucklocalizador@gmail.com";
 			final String PASSWORD = "foodtruck1";
 			
-			String mensagem =  new StringBuffer().append("<p>Ol· administrador(a) do(a) <b>")
+			String mensagem =  new StringBuffer().append("<p>Ol√° administrador(a) do(a) <b>")
 												 .append(foodTruck)
 												 .append("</b>,")
 												 .append("<br/>")
@@ -64,7 +64,7 @@ public class EmailHelper {
 			final String USERNAME = "foodtrucklocalizador@gmail.com";
 			final String PASSWORD = "foodtruck1";
 			
-			String mensagem =  new StringBuffer().append("<p>Ol· administrador(a) do(a) <b>")
+			String mensagem =  new StringBuffer().append("<p>Ol√° administrador(a) do(a) <b>")
 												 .append(foodTruck)
 												 .append("</b>,")
 												 .append("<br/>")
@@ -73,7 +73,7 @@ public class EmailHelper {
 												 .append(senha)
 												 .append(".<br/>")
 												 .append("<br/>")
-												 .append("VocÍ pode acessar diretamente seu cadastro clicando em <b><a href='")
+												 .append("Voc√™ pode acessar diretamente seu cadastro clicando em <b><a href='")
 												 .append(ENDERECO)
 												 .append("/ProjectFoodTruck/FachadaCadastrarFoodTruck?id=")													   
 												 .append(id)
