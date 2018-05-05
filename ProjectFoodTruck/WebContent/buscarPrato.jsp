@@ -131,7 +131,7 @@
 			<div class="modal-dialog modal-dialog-centered" role="document"> 
 				<div class="modal-content">
 					<div class="modal-header">
-						<h4>Seja voltar para tela de login?</h4>
+						<h4>Deseja voltar para tela de login?</h4>
 					</div>
 					<div class="modal-body">
 						<p>Ao sair do gerenciamento do Food Truck as informações podem não ser salvas</p>
