@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 
 import com.google.gson.Gson;
@@ -27,14 +28,16 @@ public class ControlerFoodTruck extends ControlerBase {
 		
 		Map<String, Object> hash = new HashMap<>();
 		
-		if(!foodTruck.getSenha().equals(senhaAtual)) {
+		String senhaAtualCriptografada = DigestUtils.sha256Hex(senhaAtual);
+		if(!foodTruck.getSenha().equals(senhaAtualCriptografada)) {
 			hash.put("retorno", "senha");
 			hash.put("mensagem", "A senha atual esta incorreta");
 		} else if(!novaSenha.equals(confirmarNovaSenha)) {
 			hash.put("retorno", "senha");
 			hash.put("mensagem", "As senhas estao diferentes");
 		} else {
-			foodTruck.setSenha(novaSenha);
+			String novaSenhaCriptografada = DigestUtils.sha256Hex(novaSenha);
+			foodTruck.setSenha(novaSenhaCriptografada);
 			DaoFactory.getFoodTruckDao().update(foodTruck);
 		}
 		
@@ -76,9 +79,10 @@ public class ControlerFoodTruck extends ControlerBase {
 	}
 	
 	public void cadastrar(String foodtruck, String email, String descricao, String senha, String senha2){
+		String senhaCriptografada = DigestUtils.sha256Hex(senha);
 		FoodTruck foodTruck = new FoodTruck().setEmail(email)
 							                 .setNome(foodtruck)
-							                 .setSenha(senha)
+							                 .setSenha(senhaCriptografada)
 							                 .setDescricao(descricao)
 							                 .setLatitude(0.0)
 							                 .setLongitude(0.0)
@@ -97,9 +101,10 @@ public class ControlerFoodTruck extends ControlerBase {
 	
 	public void enviarNovaSenhaPorEmail(String email){
 		String senha = geradorDeCodigoAleatorio();
-		
+
+		String senhaCriptografada = DigestUtils.sha256Hex(senha);
 		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().buscarPorEmail(email);
-				  foodTruck.setSenha(senha); 
+				  foodTruck.setSenha(senhaCriptografada); 
 				  
 	    DaoFactory.getFoodTruckDao().update(foodTruck);
 	    

@@ -1,9 +1,10 @@
 package dao.jinq;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import dao.IFoodTruckDao;
 import model.FoodTruck;
@@ -28,7 +29,8 @@ public class FoodTruckDao extends GenericDaoJinq<FoodTruck> implements IFoodTruc
 	@Override
 	public FoodTruck loggar(String email, String senha) {
 		try {
-			return getStream().where(f -> f.getEmail().equals(email) && f.getSenha().equals(senha))
+			String senhaAtualCriptografada = DigestUtils.sha256Hex(senha);
+			return getStream().where(f -> f.getEmail().equals(email) && f.getSenha().equals(senhaAtualCriptografada))
 					          .select(p -> p)
 					          .getOnlyValue();			
 		} catch (NoSuchElementException e) {
