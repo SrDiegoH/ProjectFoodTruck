@@ -81,4 +81,18 @@ public class ControlerPrato extends ControlerBase{
 		
 		DaoFactory.getPratoDao().update(prato);
 	}
+	
+	public Map<String, Object> pesquisarPratoPorFoodTruckENome(Integer fk, String nome){
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(fk);
+		
+		Map<String, Object> hash = new HashMap<>();
+		
+		hash.put("foodtruck", foodTruck.getNome());				
+		hash.put("id", foodTruck.getId());
+		
+		hash.put("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruckENome(fk, nome));
+		hash.put("url", "buscarPrato.jsp");
+		
+		return hash;
+	}
 }

@@ -47,7 +47,7 @@
                     var id = $(this).attr('id');
                     fnDirecionaPagina('alterarprato', id);
                 });
-            });
+            });            
         </script>
 
         <%
@@ -96,7 +96,19 @@
 			        <li class="nav-item"><a class="nav-link" data-toggle="modal" role="tab" aria-controls="home" data-target="#divConfirm">Sair</a></li>	
 			    </ul>
 			</div>
-
+			
+            <div style="align: center">
+            <center>
+                <form id="form-pesquisar" action="FachadaAlterarPratos" method="get" style="max-width: 330px; padding: 15px; margin: 0 auto;display: inline-flex;">
+                    <input type="hidden" name="acao" value="pesquisar"> 
+                    <input type="hidden" id="id" name="id" value="${id}"/>
+                    <input type="text" class="form-control" size="10" name="nmPrato" placeholder="Nome do prato" id="nmPrato" maxlength="100" aria-describedby="basic-addon1" required="true" />
+                    <button class="btn btn-primary" id="input-pesquisar" type="submit"><i class="material-icons" style="color: #DAB400;">search</i></button>
+                    <button class="btn" id="input-limpar" type="button" onclick="fnDirecionaPagina('buscarprato', ${id})"><i class="material-icons" style="color: #DAB400;">clear</i></button>
+                </form>
+                </center>
+            </div>
+            
             <div id="skrollr-form">
                 <table id="tabelaRegistros" class="table table-hover table-condensed">
                     <thead class="thead-inverse">

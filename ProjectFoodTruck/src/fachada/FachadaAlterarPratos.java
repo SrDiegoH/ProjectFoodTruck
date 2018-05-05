@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,9 +16,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import controler.ControlerFactory;
 import dao.DaoFactory;
 import model.Prato;
@@ -55,6 +58,14 @@ public class FachadaAlterarPratos extends FachadaBase {
 			setarRequest(request, ControlerFactory.getPratoControler().excluir(Integer.parseInt(request.getParameter("id"))));
 			
 			rd = request.getRequestDispatcher("buscarPrato.jsp");
+			
+			rd.forward(request, response);
+		} else if (acao.equalsIgnoreCase("pesquisar")){
+			Map<String, Object> hash = ControlerFactory.getPratoControler().pesquisarPratoPorFoodTruckENome(Integer.parseInt(request.getParameter("id")), request.getParameter("nmPrato"));
+			
+			setarRequest(request, hash);
+			
+			rd = request.getRequestDispatcher(hash.get("url").toString());
 			
 			rd.forward(request, response);
 		}
