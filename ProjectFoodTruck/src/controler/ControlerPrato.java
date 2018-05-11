@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import model.FoodTruck;
 import model.Prato;
+import model.Session;
 
 public class ControlerPrato extends ControlerBase{
 	protected ControlerPrato() {}
@@ -39,27 +40,22 @@ public class ControlerPrato extends ControlerBase{
 		return hash;
 	}
 	
-	public Map<String, Object> cadastrar(Integer id, String foodtruck, Double preco, String prato, String descricao){
+	public Map<String, Object> cadastrar(String hashValor, Double preco, String prato, String descricao){
 		Map<String, Object> hash = new HashMap<>();
 		
 		try {
-			FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(id);
+			Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
+			
+			FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());	
 			
 			DaoFactory.getPratoDao().insert(new Prato().setNome(prato)
 													   .setPreco(preco)
 													   .setDescricao(descricao)
 													   .setFoodTruck(foodTruck)
-						                   );
-
-			
-			hash.put("foodtruck", foodTruck.getNome());
-			hash.put("id", foodTruck.getId());
+						                   );		
 		} catch (Exception e) {
 			hash.put("retorno", "preco");
 			hash.put("mensagem", "Formato do preco invalido");
-			
-			hash.put("foodtruck", foodtruck);
-			hash.put("id", id);
 			hash.put("prato", prato);
 			hash.put("descricaoPrato", descricao);
 		}
@@ -82,15 +78,14 @@ public class ControlerPrato extends ControlerBase{
 		DaoFactory.getPratoDao().update(prato);
 	}
 	
-	public Map<String, Object> pesquisarPratoPorFoodTruckENome(Integer fk, String nome){
-		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(fk);
+	public Map<String, Object> pesquisarPratoPorFoodTruckENome(String hashValor, String nome){
+		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
+		
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());
 		
 		Map<String, Object> hash = new HashMap<>();
 		
-		hash.put("foodtruck", foodTruck.getNome());				
-		hash.put("id", foodTruck.getId());
-		
-		hash.put("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruckENome(fk, nome));
+		hash.put("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruckENome(foodTruck.getId(), nome));
 		hash.put("url", "buscarPrato.jsp");
 		
 		return hash;

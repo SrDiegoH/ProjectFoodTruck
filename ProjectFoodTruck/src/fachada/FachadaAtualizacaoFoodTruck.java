@@ -34,40 +34,46 @@ public class FachadaAtualizacaoFoodTruck extends FachadaBase {
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = null;
-		
-		cookie = Arrays.asList(request.getCookies()).stream()
-													.filter(c -> c.getName().equals("idFoodTruck"))
-													.collect(Collectors.toList())
-													.get(0);
-		
-		String acao = request.getParameter("acao");
-		if(acao == null && (cookie.getName().isEmpty())){
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		
-		if(ServletFileUpload.isMultipartContent(request)){
-			try {
-				Integer id = Integer.parseInt(cookie.getValue());
-				String context = getServletContext().getRealPath("\\imagensFoodTruck");
-				List<FileItem> fileItemsList = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-				
-				setarRequest(request, ControlerFactory.getFoodTruckControler().uploadImagem(id, context, fileItemsList));
-			} catch (FileUploadException e) {
-				e.printStackTrace();
-			}
-		} else {	
-			Integer id = Integer.parseInt(request.getParameter("id"));
-			String descricao = request.getParameter("descricao");
-			String foodtruck = request.getParameter("foodtruck");
-			String email = request.getParameter("email");
+    	RequestDispatcher rd = null;
+    	
+		try {
+			Cookie cookie = Arrays.asList(request.getCookies()).stream()
+								  .filter(c -> c.getName().equals("SESSION"))
+								  .collect(Collectors.toList())
+								  .get(0);
 			
-			setarRequest(request, ControlerFactory.getFoodTruckControler().alterar(id, descricao, foodtruck, email));
+			if(cookie == null) {
+				throw new Exception();
+			}
+
+			if(!ControlerFactory.getSessionControler().isOver(cookie.getValue())) {
+				String hashValor = cookie.getValue();
+				
+				if(ServletFileUpload.isMultipartContent(request)){
+					try {
+						String context = getServletContext().getRealPath("\\imagensFoodTruck");
+						List<FileItem> fileItemsList = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+						
+						setarRequest(request, ControlerFactory.getFoodTruckControler().uploadImagem(hashValor, context, fileItemsList));
+					} catch (FileUploadException e) {
+						e.printStackTrace();
+					}
+				} else {
+					String descricao = request.getParameter("descricao");
+					String foodtruck = request.getParameter("foodtruck");
+					String email = request.getParameter("email");
+					
+					setarRequest(request, ControlerFactory.getFoodTruckControler().alterar(hashValor, descricao, foodtruck, email));
+				}
+				
+				rd = request.getRequestDispatcher("gerenciarFoodTruck.jsp");		
+				
+				rd.forward(request, response);
+			} else {
+				throw new Exception();				
+			}
+		} catch (Exception e) {
+			response.sendRedirect("login.jsp");
 		}
-		
-		rd = request.getRequestDispatcher("gerenciarFoodTruck.jsp");		
-		
-		rd.forward(request, response);
 	}
 }

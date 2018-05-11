@@ -50,14 +50,10 @@ public class FoodTruckDao extends GenericDaoJinq<FoodTruck> implements IFoodTruc
 					   	  .select(p -> p)
 					   	  .toList()
 					   	  .stream()
-					   	  .map(p -> {
-									p.setPratos(new ArrayList<>()); 
-									return p;
-	   		    	  		   }
-					   	  )
-					   	  .map( a -> {a.setLocais(new ArrayList<>());
-					   		  return a;
-					   	  }).collect(Collectors.toList());
+					   	  .map(p -> {p.setPratos(new ArrayList<>()); return p;})
+					   	  .map(s -> {s.setSession(null); return s;})
+					   	  .map(l -> {l.setLocais(new ArrayList<>()); return l;})
+					   	  .collect(Collectors.toList());
 	}
 
 	@Override

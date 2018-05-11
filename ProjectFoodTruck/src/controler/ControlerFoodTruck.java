@@ -16,6 +16,7 @@ import com.google.gson.GsonBuilder;
 import dao.DaoFactory;
 import model.FoodTruck;
 import model.Prato;
+import model.Session;
 import util.EmailHelper;
 import util.ImagemHelper;
 
@@ -23,8 +24,10 @@ public class ControlerFoodTruck extends ControlerBase {
 	protected ControlerFoodTruck() {}	
 	
 	//Funcoes de regra de negocios e acesso ao dao	
-	public Map<String, Object> alterarSenha(Integer id, String senhaAtual, String novaSenha, String confirmarNovaSenha){
-		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(id);
+	public Map<String, Object> alterarSenha(String hashValor, String senhaAtual, String novaSenha, String confirmarNovaSenha){
+		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
+		
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());	
 		
 		Map<String, Object> hash = new HashMap<>();
 		
@@ -39,14 +42,14 @@ public class ControlerFoodTruck extends ControlerBase {
 			String novaSenhaCriptografada = DigestUtils.sha256Hex(novaSenha);
 			foodTruck.setSenha(novaSenhaCriptografada);
 			DaoFactory.getFoodTruckDao().update(foodTruck);
-		}
-		
-		hash.put("id", id);							
+		}					
 		return hash;
 	}
 	
-	public Map<String, Object> alterar(Integer id, String descricao, String foodtruck, String email){
-		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(id);		
+	public Map<String, Object> alterar(String hashValor, String descricao, String foodtruck, String email){
+		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
+		
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());		
 				  foodTruck.setDescricao(descricao);
 				  foodTruck.setNome(foodtruck);
 				  foodTruck.setEmail(email);
@@ -57,7 +60,6 @@ public class ControlerFoodTruck extends ControlerBase {
 							hash.put("email", foodTruck.getEmail());
 							hash.put("descricao", foodTruck.getDescricao());
 							hash.put("foodtruck", foodTruck.getNome());
-							hash.put("id", foodTruck.getId());
 		
 		return hash;
 	}
@@ -68,13 +70,15 @@ public class ControlerFoodTruck extends ControlerBase {
 				  
 		DaoFactory.getFoodTruckDao().update(foodTruck);
 		
+		Session session = ControlerFactory.getSessionControler().loggar(foodTruck);
+		
 		Map<String, Object> hash = new HashMap<>();
 							hash.put("email", foodTruck.getEmail());
 							hash.put("descricao", foodTruck.getDescricao());
 							hash.put("foodtruck", foodTruck.getNome());
-							hash.put("id", foodTruck.getId());
 							hash.put("confirmada", foodTruck.getContaConfirmada().toLowerCase());
-							
+							hash.put("hash", session.getHashValor());
+							hash.put("prazo", session.getPrazo());
 		return hash;
 	}
 	
@@ -113,21 +117,26 @@ public class ControlerFoodTruck extends ControlerBase {
 		
 	public Map<String, Object> buscarPorId(String id){
 		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(Integer.parseInt(id));
+
+		Session session = ControlerFactory.getSessionControler().loggar(foodTruck);
 		
 		Map<String, Object> hash = new HashMap<>();
 							hash.put("email", foodTruck.getEmail());
 							hash.put("descricao", foodTruck.getDescricao());
 							hash.put("foodtruck", foodTruck.getNome());
-							hash.put("id", foodTruck.getId());
 							hash.put("confirmada", foodTruck.getContaConfirmada().toLowerCase());
+							hash.put("hash", session.getHashValor());
+							hash.put("prazo", session.getPrazo());
 							
 		return hash;
 	}
 	
-	public Map<String, Object> uploadImagem(Integer id, String context, List<FileItem> fileItemsList){		
-		String retorno = ImagemHelper.gravarImagemFoodTruck(id.toString(), context, fileItemsList);
+	public Map<String, Object> uploadImagem(String hashValor, String context, List<FileItem> fileItemsList){
+		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
 		
-		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(id);
+		String retorno = ImagemHelper.gravarImagemFoodTruck(session.getFoodTruck().getId().toString(), context, fileItemsList);
+		
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());
 				  foodTruck.setLocalImagem(retorno);
 		
 		DaoFactory.getFoodTruckDao().update(foodTruck);
@@ -136,24 +145,24 @@ public class ControlerFoodTruck extends ControlerBase {
 							hash.put("email", foodTruck.getEmail());
 							hash.put("descricao", foodTruck.getDescricao());
 							hash.put("foodtruck", foodTruck.getNome());
-							hash.put("id", foodTruck.getId());
 		return hash;
 	}
 	
-	public String buscarFoodTruckAoRedor(Double lat, Double lon){	
-		FoodTruck f = new FoodTruck();
-		
+	public String buscarFoodTruckAoRedor(Double lat, Double lon){
 		 ArrayList<FoodTruck> foodTrucks = (ArrayList<FoodTruck>) DaoFactory.getFoodTruckDao().foodTruckAoRedor(lat, lon);
-		 System.out.println(foodTrucks.get(0).getNome());
+		 		 
 		 Map<String, ArrayList<FoodTruck>> options = new HashMap<>();
-		                              options.put("listaFoodTruck", foodTrucks);
+		                              	   options.put("listaFoodTruck", foodTrucks);
+		                              	   
   		Gson g = new GsonBuilder().disableInnerClassSerialization().create();
-  				String json = g.toJson(options);
-		 return json;//new Gson().toJson(options);
+  		String json = g.toJson(options);
+		return json;
 	}
 	
-	public Map<String, Object> alterarLocalizacao(boolean isApagar, Integer id, Double latitude, Double longitude){
-		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(id);
+	public Map<String, Object> alterarLocalizacao(boolean isApagar, String hashValor, Double latitude, Double longitude){
+		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
+		
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());
 				  foodTruck.setLatitude(latitude);
 			  	  foodTruck.setLongitude(longitude);
 	
@@ -184,12 +193,15 @@ public class ControlerFoodTruck extends ControlerBase {
 		Map<String, Object> hash = new HashMap<>();
 		
 		try{
+			Session session = ControlerFactory.getSessionControler().loggar(foodTruck);
+			
 			if(foodTruck != null){
 				if(foodTruck.getContaConfirmada().equalsIgnoreCase("SIM")){
 					hash.put("email", foodTruck.getEmail());
 					hash.put("descricao", foodTruck.getDescricao());		
 					hash.put("foodtruck", foodTruck.getNome());
-					hash.put("id", foodTruck.getId());
+					hash.put("hash", session.getHashValor());
+					hash.put("prazo", session.getPrazo());
 				} else
 					throw new Exception("Sua Conta ainda nao foi confirmada.");
 			} else
@@ -199,6 +211,30 @@ public class ControlerFoodTruck extends ControlerBase {
 			hash.put("retorno", "login");
 		}
 		
+		return hash;
+	}
+	
+	public Map<String, Object> pegarFoodTruckPorHashValor(String hashValor){
+		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
+		
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());
+
+		Map<String, Object> hash = new HashMap<>();		
+
+		try{			
+			if(foodTruck != null){
+				if(foodTruck.getContaConfirmada().equalsIgnoreCase("SIM")){
+					hash.put("email", foodTruck.getEmail());
+					hash.put("descricao", foodTruck.getDescricao());		
+					hash.put("foodtruck", foodTruck.getNome());
+				} else
+					throw new Exception("Sua Conta ainda nao foi confirmada.");
+			} else
+				throw new Exception("Email ou senha incorretos.");
+		} catch (Exception e){
+			hash.put("mensagem", e.getMessage());
+			hash.put("retorno", "login");
+		}		
 		return hash;
 	}
 	
@@ -214,18 +250,19 @@ public class ControlerFoodTruck extends ControlerBase {
 		                .reduce("", (a, b) -> a + b);
 	}
 	
-	public Map<String, Object> carregaNavegacao(String acao, Integer id){
-		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(id);
+	public Map<String, Object> carregaNavegacao(String acao, String hashValor){
+		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
+		
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());
 		
 		Map<String, Object> hash = new HashMap<>();
 		
-		hash.put("foodtruck", foodTruck.getNome());				
-		hash.put("id", foodTruck.getId());
+		hash.put("foodtruck", foodTruck.getNome());
 		
 		if(acao.equalsIgnoreCase("localizacao")){			
 			hash.put("latitude", foodTruck.getLatitude());
 			hash.put("longitude", foodTruck.getLongitude());
-			hash.put("arrayLocais", DaoFactory.getLocalDao().filtrarPorFoodTruck(id));
+			hash.put("arrayLocais", DaoFactory.getLocalDao().filtrarPorFoodTruck(foodTruck.getId()));
 			hash.put("url", "alterarLocalizacao.jsp");
 		} else if(acao.equalsIgnoreCase("alterarFoodTruck")){			
 			hash.put("email", foodTruck.getEmail());
@@ -235,10 +272,13 @@ public class ControlerFoodTruck extends ControlerBase {
 		} else if(acao.equalsIgnoreCase("cadastrarPrato")){
 			hash.put("url", "cadastrarPrato.jsp");
 		} else if(acao.equalsIgnoreCase("buscarPrato")){
-			hash.put("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(id));
+			hash.put("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(foodTruck.getId()));
 			hash.put("url", "buscarPrato.jsp");
 		} else if(acao.equalsIgnoreCase("senha")){
 			hash.put("url", "alterarSenha.jsp");
+		} else if(acao.equalsIgnoreCase("sair")){
+			ControlerFactory.getSessionControler().desloggar(hashValor);
+			hash.put("url", "login.jsp");
 		}
 		
 		return hash;

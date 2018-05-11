@@ -33,28 +33,29 @@ function mascarar(t, mask){
 function textoCaixaAlta(componenTexto){
 	componenTexto.value = componenTexto.value.toUpperCase();
 }
-function fnDirecionaPagina(source, id){
+
+function fnDirecionaPagina(source){
 	var caminho = "";
 	switch(source){
 		case "alterainformacoes":
-			caminho = "FachadaNavegacao?acao=alterarFoodTruck&id=" + id;
+			caminho = "FachadaNavegacao?acao=alterarFoodTruck";
 			break;
 		case "senha":
-			caminho = "FachadaNavegacao?acao=Senha&id=" + id;
+			caminho = "FachadaNavegacao?acao=Senha";
 			break;
 		case "prato":
-			caminho = "FachadaNavegacao?acao=cadastrarPrato&id=" + id;
+			caminho = "FachadaNavegacao?acao=cadastrarPrato";
 			break;
 		case "buscarprato":
-			caminho = "FachadaNavegacao?acao=buscarPrato&id=" + id;
+			caminho = "FachadaNavegacao?acao=buscarPrato";
 			break;
 		case "localiza":
-			caminho = "FachadaNavegacao?acao=localizacao&id=" + id;
+			caminho = "FachadaNavegacao?acao=localizacao";
 			break;
-		case "alterarprato":
-			caminho = "FachadaAlterarPratos?acao=alterar&id=" + id;
+		case "sair":
+			caminho = "FachadaNavegacao?acao=sair";
 			break;
-
 	}
+	
 	location.href = caminho;
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import dao.ILocalDao;
 import model.Local;
-import model.Prato;
 
 public class LocalDao extends GenericDaoJinq<Local> implements ILocalDao {
 	public LocalDao() {

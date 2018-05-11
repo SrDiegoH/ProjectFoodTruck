@@ -42,8 +42,6 @@
             String foodtruck = (String) request.getAttribute("foodtruck");
             foodtruck = foodtruck == null ? "" : foodtruck.trim();
 
-            Integer id = (Integer) request.getAttribute("id");
-            id = id == null ? -1 : id;
             String confirmada = (String) request.getAttribute("confirmada");
             confirmada = confirmada == null ? "" : confirmada.trim();
         %>	
@@ -77,11 +75,11 @@
 			    
 			    <div class="collapse navbar-collapse" id="navbarNavDropdown">
 			        <ul class="navbar-nav">
-			            <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
+			            <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+		                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
 		                <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#divConfirm">Sair</a></li>
 			        </ul>
 			    </div>
@@ -90,11 +88,11 @@
 		
 		<div class="mobile-hide">
 		    <ul class="nav nav-tabs" role="tablist">
-		        <li class="nav-item"><a class="nav-link active" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-		        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-		        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-		        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-		        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
+		        <li class="nav-item"><a class="nav-link active" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+		        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+		        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+		        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+		        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
 		        <li class="nav-item"><a class="nav-link" data-toggle="modal" role="tab" aria-controls="home" data-target="#divConfirm">Sair</a></li>	
 		    </ul>
 		</div>
@@ -106,8 +104,7 @@
                 <br />					
                 <input type="hidden" name="acao" value="atualizar"> 
                 <input type="email" class="form-control" size="20" value="${email}" name="email" placeholder="email" id="email" maxlength="20" aria-describedby="basic-addon1" autofocus="true" required="true" style="border-radius: 4px 4px 0px 0px;">
-                <input type="text" class="form-control" size="20" value="${foodtruck}" name="foodtruck" placeholder="Food Truck" id="foodtruck" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;">
-                <input type="hidden" id="id" name="id" value="${id}">					
+                <input type="text" class="form-control" size="20" value="${foodtruck}" name="foodtruck" placeholder="Food Truck" id="foodtruck" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;">				
                 <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" value="" name="descricao" placeholder="Descrição (Não Obrigatório)" id="descricao">${descricao}</textarea>
 
                 <br/>	  				 
@@ -136,7 +133,7 @@
 					</div>
 					<div class="modal-footer">
 						<input class="btn btn-primary" type="button" data-dismiss="modal" value="Não">
-						<a href="login.jsp"><input type="button" class="btn btn-danger" value="Sim"></a>
+						<input class="btn btn-danger"  type="button" data-dismiss="modal" value="Sim" onclick="location.href = 'FachadaNavegacao?acao=sair';">
 					</div>
 				</div>
 			</div>

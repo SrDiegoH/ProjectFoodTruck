@@ -45,18 +45,12 @@
                 
                 $('[data-mark="edit"]').click(function (ev) {
                     var id = $(this).attr('id');
-                    fnDirecionaPagina('alterarprato', id);
+                    location.href = "FachadaAlterarPratos?acao=alterar&id=" + id;
                 });
             });            
         </script>
 
         <%
-            String foodtruck = (String) request.getAttribute("foodtruck");
-            foodtruck = foodtruck == null ? "" : foodtruck.trim();
-
-            Integer id = (Integer) request.getAttribute("id");
-            id = id == null ? -1 : id;
-
             List<Prato> arrayPratos = (List<Prato>) request.getAttribute("arrayPratos");
             arrayPratos = arrayPratos == null ? new ArrayList() : arrayPratos;
         %>	    
@@ -75,11 +69,11 @@
 				    
 				    <div class="collapse navbar-collapse" id="navbarNavDropdown">
 				        <ul class="navbar-nav">
-				            <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-			                <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
+				            <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+			                <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
 			                <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#divConfirm">Sair</a></li>
 				        </ul>
 				    </div>
@@ -88,23 +82,23 @@
 			
 			<div class="mobile-hide">
 			    <ul class="nav nav-tabs" role="tablist">
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-			        <li class="nav-item"><a class="nav-link active" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+			        <li class="nav-item"><a class="nav-link active" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
 			        <li class="nav-item"><a class="nav-link" data-toggle="modal" role="tab" aria-controls="home" data-target="#divConfirm">Sair</a></li>	
 			    </ul>
 			</div>
+			
 			
             <div style="align: center">
             <center>
                 <form id="form-pesquisar" action="FachadaAlterarPratos" method="get" style="max-width: 330px; padding: 15px; margin: 0 auto;display: inline-flex;">
                     <input type="hidden" name="acao" value="pesquisar"> 
-                    <input type="hidden" id="id" name="id" value="${id}"/>
                     <input type="text" class="form-control" size="10" name="nmPrato" placeholder="Nome do prato" id="nmPrato" maxlength="100" aria-describedby="basic-addon1" required="true" />
                     <button class="btn btn-primary" id="input-pesquisar" type="submit"><i class="material-icons" style="color: #DAB400;">search</i></button>
-                    <button class="btn" id="input-limpar" type="button" onclick="fnDirecionaPagina('buscarprato', ${id})"><i class="material-icons" style="color: #DAB400;">clear</i></button>
+                    <button class="btn" id="input-limpar" type="button" onclick="fnDirecionaPagina('buscarprato')"><i class="material-icons" style="color: #DAB400;">clear</i></button>
                 </form>
                 </center>
             </div>
@@ -150,7 +144,7 @@
 					</div>
 					<div class="modal-footer">
 						<input class="btn btn-primary" type="button" data-dismiss="modal" value="Não">
-						<a href="login.jsp"><input type="button" class="btn btn-danger" value="Sim"></a>
+						<input class="btn btn-danger"  type="button" data-dismiss="modal" value="Sim" onclick="location.href = 'FachadaNavegacao?acao=sair';">
 					</div>
 				</div>
 			</div>

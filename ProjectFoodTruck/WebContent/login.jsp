@@ -35,6 +35,7 @@
         <%
             String retorno = (String) request.getAttribute("retorno");
             retorno = retorno == null ? "" : retorno.trim();
+            
             String mensagem = (String) request.getAttribute("mensagem");
             mensagem = mensagem == null ? "" : mensagem.trim();
         %>		

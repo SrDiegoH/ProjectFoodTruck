@@ -60,18 +60,13 @@
                 var lon = document.getElementById("inputLongitude").value;
 				var nome = document.getElementById("inputFavorito").value;
 
-				//document.getElementById("bntAdicionar").href="FachadaLocal?acao=adicionarNaLista&id=" + ${id} + "&latitude=" + lat + "&longitude=" + lon + "&nome=" +nome;
-                location.href = "FachadaLocal?acao=adicionarNaLista&id=" + ${id} + "&latitude=" + lat + "&longitude=" + lon + "&nome=" + nome;
-                //$("#bntAdicionar").trigger("click");
+				location.href = "FachadaLocal?acao=adicionarNaLista&latitude=" + lat + "&longitude=" + lon + "&nome=" + nome;
             }
         </script>
 
         <%
             String foodtruck = (String) request.getAttribute("foodtruck");
             foodtruck = foodtruck == null ? "" : foodtruck.trim();
-
-            Integer id = (Integer) request.getAttribute("id");
-            id = id == null ? -1 : id;
 
             Double latitude = (Double) request.getAttribute("latitude");
             latitude = latitude == null ? -1 : latitude;
@@ -88,8 +83,8 @@
             <header>
                 <h1 style="font-family: cursive;color: #DAB400;"><a href="index.html" style="font-family: cursive;color: #DAB400;"><img src="imagens/logo.png" style="width: 25%;"></a> Food Tracking</h1>
             </header>
-            
-            <div class="mobile desktop-hide">
+
+			<div class="mobile desktop-hide">
 				<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
 				    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 				        <i class="material-icons" style="color: #DAB400;">menu</i>
@@ -97,28 +92,27 @@
 				    
 				    <div class="collapse navbar-collapse" id="navbarNavDropdown">
 				        <ul class="navbar-nav">
-				            <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-			                <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
+				            <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+			                <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
 			                <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#divConfirm">Sair</a></li>
 				        </ul>
 				    </div>
 				</nav>
 			</div>
 			
-		    <div class="mobile-hide">
-		        <ul class="nav nav-tabs" role="tablist">
-		            <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-		            <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-		            <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-		            <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-		            <li class="nav-item"><a class="nav-link active" data-toggle="tab" role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
-		            <li class="nav-item"><a class="nav-link" data-toggle="modal" role="tab" aria-controls="home" data-target="#divConfirm">Sair</a></li>	
-		        </ul>
-		    </div>
-        </div>
+			<div class="mobile-hide">
+			    <ul class="nav nav-tabs" role="tablist">
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+			        <li class="nav-item"><a class="nav-link active" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="modal" role="tab" aria-controls="home" data-target="#divConfirm">Sair</a></li>	
+			    </ul>
+			</div>
         <br />
 
         <div class="alert alert-success" id="alertSucesso" role="alert" style="display:none"></div>
@@ -133,7 +127,6 @@
             <input type="hidden" name="latitude" value="${latitude}" id="inputLatitude">
             <input type="hidden" name="longitude" value="${longitude}" id="inputLongitude">
             <input type="hidden" name="foodTruck" value="${foodtruck}" id="inputFoodTruck">
-            <input type="hidden" name="id" value="${id}" id="inputId">
             <input type="hidden" name="acao" value="salvar">
             <div class="btn-toolbar" role="toolbar" aria-label="..." style="display: inline;">
 	            <a><input type="submit" id="btnSalvar" class="btn btn-primary btn-block" value="Salvar"/></a>
@@ -183,7 +176,7 @@
 					</div>
 					<div class="modal-footer">
 						<input class="btn btn-primary" type="button" data-dismiss="modal" value="Não">
-						<a href="login.jsp"><input type="button" class="btn btn-danger" value="Sim"></a>
+						<input class="btn btn-danger"  type="button" data-dismiss="modal" value="Sim" onclick="location.href = 'FachadaNavegacao?acao=sair';">
 					</div>
 				</div>
 			</div>			

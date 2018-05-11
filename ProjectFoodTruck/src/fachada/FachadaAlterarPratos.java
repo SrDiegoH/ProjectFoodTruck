@@ -24,50 +24,66 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import controler.ControlerFactory;
 import dao.DaoFactory;
 import model.Prato;
+import model.Session;
 
 @WebServlet("/FachadaAlterarPratos")
-public class FachadaAlterarPratos extends FachadaBase {	
-	private List<Cookie> cookies;	
-	private Cookie cookie, cookie2;
+public class FachadaAlterarPratos extends FachadaBase {
      	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher rd = null;
+	
 		String acao = request.getParameter("acao");
-				
-		if(acao.equalsIgnoreCase("alterar")){			
-			Map<String, Object> hash = ControlerFactory.getPratoControler().alterar(Integer.parseInt(request.getParameter("id")));
+		if(acao == null){
+			response.sendRedirect("login.jsp");
+			return;
+		}
+		
+		try {
+			Cookie cookie = Arrays.asList(request.getCookies()).stream()
+								  .filter(c -> c.getName().equals("SESSION"))
+								  .collect(Collectors.toList())
+								  .get(0);
 			
-			setarRequest(request, hash);
-			
-			response.addCookie(new Cookie("idPratoFoodTruck", hash.get("id").toString()));
-			
-			rd = request.getRequestDispatcher("alterarPrato.jsp");
-			rd.forward(request, response);
-		} else if (acao.equalsIgnoreCase("excluir")){
-//			Prato prato = DaoFactory.getPratoDao().find(Integer.parseInt(request.getParameter("id")));
-//			
-//			DaoFactory.getPratoDao().delete(Integer.parseInt(request.getParameter("id")));
-//						
-//			request.setAttribute("foodtruck", prato.getFoodTruck().getNome());				
-//			request.setAttribute("id", prato.getFoodTruck().getId());
-//			request.setAttribute("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(prato.getFoodTruck().getId()));
-			
-			setarRequest(request, ControlerFactory.getPratoControler().excluir(Integer.parseInt(request.getParameter("id"))));
-			
-			rd = request.getRequestDispatcher("buscarPrato.jsp");
-			
-			rd.forward(request, response);
-		} else if (acao.equalsIgnoreCase("pesquisar")){
-			Map<String, Object> hash = ControlerFactory.getPratoControler().pesquisarPratoPorFoodTruckENome(Integer.parseInt(request.getParameter("id")), request.getParameter("nmPrato"));
-			
-			setarRequest(request, hash);
-			
-			rd = request.getRequestDispatcher(hash.get("url").toString());
-			
-			rd.forward(request, response);
+			if(cookie == null) {
+				throw new Exception();
+			}
+	
+			if(!ControlerFactory.getSessionControler().isOver(cookie.getValue())) {
+				if(acao.equalsIgnoreCase("alterar")){			
+					Map<String, Object> hash = ControlerFactory.getPratoControler().alterar(Integer.parseInt(request.getParameter("id")));
+					
+					setarRequest(request, hash);
+
+					request.setAttribute("idPrato", hash.get("id").toString());
+				    Cookie newCookie = new Cookie("idPrato", hash.get("id").toString());
+				    	   newCookie.setPath(request.getContextPath());
+		    	    response.addCookie(newCookie);	
+					
+					rd = request.getRequestDispatcher("alterarPrato.jsp");
+					rd.forward(request, response);
+				} else if (acao.equalsIgnoreCase("excluir")){
+					setarRequest(request, ControlerFactory.getPratoControler().excluir(Integer.parseInt(request.getParameter("id"))));
+					
+					rd = request.getRequestDispatcher("buscarPrato.jsp");
+					
+					rd.forward(request, response);
+				} else if (acao.equalsIgnoreCase("pesquisar")){
+					Map<String, Object> hash = ControlerFactory.getPratoControler().pesquisarPratoPorFoodTruckENome(cookie.getValue(), request.getParameter("nmPrato"));
+					
+					setarRequest(request, hash);
+					
+					rd = request.getRequestDispatcher(hash.get("url").toString());
+					
+					rd.forward(request, response);
+				}
+			} else {
+				throw new Exception();				
+			}
+		} catch (Exception e) {
+			response.sendRedirect("login.jsp");
 		}
 	}
 
@@ -77,77 +93,79 @@ public class FachadaAlterarPratos extends FachadaBase {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher rd = null;
+
 		
-		cookies = Arrays.asList(request.getCookies());
-		
-		cookie = cookies.stream()
-				         .filter(c -> c.getName().equals("idPratoFoodTruck"))
-				         .collect(Collectors.toList())
-				         .get(0);
-		
-		cookie2 = cookies.stream()
-						 .filter(c -> c.getName().equals("idFoodTruck"))
-						 .collect(Collectors.toList())
-						 .get(0);
-		
-		//coisas lokas de gabriel
-		if(ServletFileUpload.isMultipartContent(request)){			  
-//		Prato prato = DaoFactory.getPratoDao().find(Integer.parseInt(cookie.getValue()));				  
-//		String retornoPrato = gravarImagem(request, cookie2.getValue(), cookie.getValue());
-//		prato.setLocalImagem(retornoPrato);
+		try {
+			Cookie cookie = Arrays.asList(request.getCookies()).stream()
+								  .filter(c -> c.getName().equals("SESSION"))
+								  .collect(Collectors.toList())
+								  .get(0);
 			
-			Prato prato = DaoFactory.getPratoDao().find(Integer.parseInt(cookie.getValue()));
-				  prato.setLocalImagem(gravarImagem(request, cookie2.getValue(), cookie.getValue()));
-			
-			DaoFactory.getPratoDao().update(prato);
-			
-			request.setAttribute("foodtruck", prato.getFoodTruck().getNome());				
-			request.setAttribute("id", prato.getFoodTruck().getId());
-			request.setAttribute("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(prato.getFoodTruck().getId()));
-			
-			rd = request.getRequestDispatcher("buscarPrato.jsp");			
-			rd.forward(request, response);
-		} else {
-			String acao = request.getParameter("acao");
-			
-			if(acao == null){
-				response.sendRedirect("login.jsp");
-				return;
-			} else if (acao.equalsIgnoreCase("alterar")){
-				try {
-					double preco = Double.parseDouble(request.getParameter("preco").trim().replace(",", "."));
+			if(cookie == null) {
+				throw new Exception();
+			}
+	
+			if(!ControlerFactory.getSessionControler().isOver(cookie.getValue())) {
+				Session session = ControlerFactory.getSessionControler().buscarPorHashValor(cookie.getValue());
+				
+				if(ServletFileUpload.isMultipartContent(request)){
+					Cookie cookie2 = Arrays.asList(request.getCookies()).stream()
+										  .filter(c -> c.getName().equals("idPrato"))
+										  .collect(Collectors.toList())
+										  .get(0);
 					
-					Prato prato = DaoFactory.getPratoDao().find(Integer.parseInt(request.getParameter("id")));
-						  prato.setNome(request.getParameter("prato").trim());
-					      prato.setDescricao(request.getParameter("descricaoPrato"));
-					      prato.setPreco(preco);
-					      
+					Prato prato = DaoFactory.getPratoDao().find(Integer.parseInt(cookie2.getValue()));
+						  prato.setLocalImagem(gravarImagem(request, session.getFoodTruck().getId().toString(), cookie2.getValue()));
+					
 					DaoFactory.getPratoDao().update(prato);
 					
-					request.setAttribute("foodtruck", prato.getNome());
-					request.setAttribute("id", Integer.parseInt(request.getParameter("fk")));
-					request.setAttribute("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(Integer.parseInt(request.getParameter("fk"))));
+					request.setAttribute("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(prato.getFoodTruck().getId()));
 					
-					rd = request.getRequestDispatcher("buscarPrato.jsp");
-				} catch (Exception e) {
-					request.setAttribute("retorno", "preco");
-					request.setAttribute("mensagem", "Formato do preco invalido");
-
-					request.setAttribute("foodtruck", request.getParameter("foodtruck"));
-					request.setAttribute("fk", Integer.parseInt(request.getParameter("fk")));
-					request.setAttribute("id", Integer.parseInt(request.getParameter("id")));
-					request.setAttribute("prato", request.getParameter("prato"));
-					request.setAttribute("descricaoPrato", request.getParameter("descricaoPrato"));
+					rd = request.getRequestDispatcher("buscarPrato.jsp");			
+					rd.forward(request, response);
+				} else {
+					String acao = request.getParameter("acao");
 					
-					rd = request.getRequestDispatcher("alterarPrato.jsp");
+					if(acao == null){
+						response.sendRedirect("login.jsp");
+						return;
+					} else if (acao.equalsIgnoreCase("alterar")){
+						try {
+							double preco = Double.parseDouble(request.getParameter("preco").trim().replace(",", "."));
+							
+							Prato prato = DaoFactory.getPratoDao().find(Integer.parseInt(request.getParameter("id")));
+								  prato.setNome(request.getParameter("prato").trim());
+							      prato.setDescricao(request.getParameter("descricaoPrato"));
+							      prato.setPreco(preco);
+							      
+							DaoFactory.getPratoDao().update(prato);
+														
+							request.setAttribute("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(session.getFoodTruck().getId()));
+							
+							rd = request.getRequestDispatcher("buscarPrato.jsp");
+						} catch (Exception e) {
+							request.setAttribute("retorno", "preco");
+							request.setAttribute("mensagem", "Formato do preco invalido");
+		
+							request.setAttribute("id", Integer.parseInt(request.getParameter("id")));
+							request.setAttribute("prato", request.getParameter("prato"));
+							request.setAttribute("descricaoPrato", request.getParameter("descricaoPrato"));
+							
+							rd = request.getRequestDispatcher("alterarPrato.jsp");
+						}
+						
+						rd.forward(request, response);
+					}
 				}
-				
-				rd.forward(request, response);
+			} else {
+				throw new Exception();				
 			}
+		} catch (Exception e) {
+			response.sendRedirect("login.jsp");
 		}
 	}	
 	
-	private String gravarImagem (HttpServletRequest request, String idFoodTruck, String idPrato) {
+	private String gravarImagem(HttpServletRequest request, String idFoodTruck, String idPrato) {
 		try {			
 			ServletFileUpload fileUp = new ServletFileUpload(new DiskFileItemFactory());
 			List<FileItem> fileItemsList = fileUp.parseRequest(request);

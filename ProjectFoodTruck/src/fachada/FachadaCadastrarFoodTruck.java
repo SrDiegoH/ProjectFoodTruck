@@ -1,11 +1,14 @@
 package fachada;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,13 +30,37 @@ public class FachadaCadastrarFoodTruck extends FachadaBase {
 		}		
 		
 		if(acao.equals("email")){
-			setarRequest(request, ControlerFactory.getFoodTruckControler().alterarEmail(request.getParameter("id")));
+			Map<String, Object> hash = ControlerFactory.getFoodTruckControler().alterarEmail(request.getParameter("id"));		
 			
+			setarRequest(request, hash);
+			String cookieName = "SESSION";
+		    String cookieValue = hash.get("hash").toString();
+			String contextPath = request.getContextPath();
+			Integer prazo = (int) ((Date) hash.get("prazo")).getTime();
+			
+		    Cookie newCookie = new Cookie(cookieName, cookieValue);
+		    	   newCookie.setPath(contextPath);
+		    	   newCookie.setMaxAge(prazo);
+		    	   
+		    response.addCookie(newCookie);	
+		    
 			rd = request.getRequestDispatcher("gerenciarFoodTruck.jsp");
 			rd.forward(request, response);
 			return;
 		} else if(acao.equals("novaSenha")){
-			setarRequest(request, ControlerFactory.getFoodTruckControler().buscarPorId(request.getParameter("id")));
+			Map<String, Object> hash = ControlerFactory.getFoodTruckControler().buscarPorId(request.getParameter("id"));		
+			
+			setarRequest(request, hash);
+			String cookieName = "SESSION";
+		    String cookieValue = hash.get("hash").toString();
+			String contextPath = request.getContextPath();
+			Integer prazo = (int) ((Date) hash.get("prazo")).getTime();
+			
+		    Cookie newCookie = new Cookie(cookieName, cookieValue);
+		    	   newCookie.setPath(contextPath);
+		    	   newCookie.setMaxAge(prazo);
+		    	   
+		    response.addCookie(newCookie);	
 			
 			rd = request.getRequestDispatcher("gerenciarFoodTruck.jsp");
 			rd.forward(request, response);

@@ -1,7 +1,5 @@
 package controler;
 
-//import java.util.HashMap;
-
 public class ControlerFactory {
 	private static ControlerFoodTruck foodTruckControler;
 	public static ControlerFoodTruck getFoodTruckControler() {
@@ -24,19 +22,10 @@ public class ControlerFactory {
 		return localControler;
 	}
 	
-	
-//	public static final String FOODTRUCK = "foodtruck";
-//	public static final String PRATO = "prato";
-//	
-//	private final HashMap<String, ControlerBase> CONTROLERS;
-//	{
-//		CONTROLERS = new HashMap<>();
-//		CONTROLERS.put(FOODTRUCK, new ControlerFoodTruck());
-//		CONTROLERS.put(PRATO, new ControlerPrato());
-//		//so sao instanciados uma vez
-//	}
-//	
-//	public ControlerBase getControlers(String chave) {
-//		return CONTROLERS.get(chave);
-//	}
+	private static ControlerSession sessionControler;
+	public static ControlerSession getSessionControler() {
+		if (sessionControler == null) 
+			sessionControler = new ControlerSession();
+		return sessionControler;
+	}
 }

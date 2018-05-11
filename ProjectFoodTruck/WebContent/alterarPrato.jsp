@@ -39,15 +39,6 @@
             String mensagem = (String) request.getAttribute("mensagem");
             mensagem = mensagem == null ? "" : mensagem.trim();
 
-            String foodtruck = (String) request.getAttribute("foodtruck");
-            foodtruck = foodtruck == null ? "" : foodtruck.trim();
-
-            Integer fk = (Integer) request.getAttribute("fk");
-            fk = fk == null ? -1 : fk;
-
-            Integer id = (Integer) request.getAttribute("id");
-            id = id == null ? -1 : id;
-
             String prato = (String) request.getAttribute("prato");
             prato = prato == null ? "" : prato.trim();
 
@@ -56,6 +47,9 @@
 
             String preco = (String) request.getAttribute("preco");
             preco = preco == null ? "" : preco.trim().replace(".", ",");
+            
+            String id = (String) request.getAttribute("idPrato");
+            id = id == null ? "" : id.trim();
         %>
 
         <c:choose>
@@ -89,11 +83,11 @@
 				    
 				    <div class="collapse navbar-collapse" id="navbarNavDropdown">
 				        <ul class="navbar-nav">
-				            <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-			                <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
+				            <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+			                <li class="nav-item"><a class="nav-link active" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+			                <li class="nav-item"><a class="nav-link" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
 			                <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#divConfirm">Sair</a></li>
 				        </ul>
 				    </div>
@@ -102,14 +96,15 @@
 			
 			<div class="mobile-hide">
 			    <ul class="nav nav-tabs" role="tablist">
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes',${id})">Alterar Informações</a></li>                
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha',${id})">Alterar Senha</a></li>
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato',${id})">Adicionar Prato</a></li>                
-			        <li class="nav-item"><a class="nav-link active" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato',${id})">Alterar Prato</a></li>
-			        <li class="nav-item"><a class="nav-link" data-toggle="tab" role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza',${id})">Localize-se</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('alterainformacoes')">Alterar Informações</a></li>                
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('senha')">Alterar Senha</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('prato')">Adicionar Prato</a></li>                
+			        <li class="nav-item"><a class="nav-link active" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('buscarprato')">Alterar Prato</a></li>
+			        <li class="nav-item"><a class="nav-link" data-toggle="tab"   role="tab" aria-controls="home" onclick="fnDirecionaPagina('localiza')">Localize-se</a></li>
 			        <li class="nav-item"><a class="nav-link" data-toggle="modal" role="tab" aria-controls="home" data-target="#divConfirm">Sair</a></li>	
 			    </ul>
 			</div>
+	        
 	        
             <div id="skrollr-form">
                 <form id="form-cadastrar-prato" action="FachadaAlterarPratos" method="post" style="max-width: 330px; padding: 15px; margin: 0 auto;">
@@ -117,21 +112,20 @@
                     <br/>
                     <br/> 
                     <input type="hidden" name="acao" value="alterar"/>
-                    <input type="hidden" id="id" name="id" value="${id}"/>
-                    <input type="hidden" id="fk" name="fk" value="${fk}"/>					
-                    <input type="hidden" id="foodtruck" name="foodtruck" value="${foodtruck}">
+                    <input type="hidden" name="id" value="${id}"/>
                     <input type="text" class="form-control" size="20" value="${prato}" name="prato" placeholder="Nome do prato" id="prato" maxlength="100" aria-describedby="basic-addon1" autofocus="true" required="true" style="border-radius: 4px 4px 0px 0px;"/>
                     <input type="text" class="form-control" size="20" value="${preco}" name="preco" placeholder="Preço" id="preco" maxlength="100" aria-describedby="basic-addon1" required="true" onkeypress="return ((event.keyCode > 47 && event.keyCode < 58) || event.keyCode == 44);" style="border-radius: 0px 0px 0px 0px;"/>
                     <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" name="descricaoPrato" placeholder="Descrição (Não Obrigatório)" id="descricaoPrato"><c:out value="${descricaoPrato}"></c:out></textarea>
                     <br/>
                     <div class="btn-toolbar" role="toolbar" aria-label="..." style="display: block;">
                         <a><input type="submit" id="input-cadastrar" class="btn btn-primary btn-block" value="Salvar"/></a>
-                        <a href="FachadaNavegacao?acao=buscarPrato&id=${fk}"><input type="button" class="btn btn-danger btn-block" value="Cancelar" /></a>
+                        <a href="FachadaNavegacao?acao=buscarPrato"><input type="button" class="btn btn-danger btn-block" value="Cancelar" /></a>
                     </div>					  
                 </form>
 
                 <form action="FachadaAlterarPratos" method="post" enctype="multipart/form-data" style="max-width: 330px; padding: 15px; margin: 0 auto;">
                     <div class="btn-toolbar" role="toolbar" aria-label="..." style="display: block;">
+                    	<input type="hidden" name="id" value="${id}"/>
                         <input id="imagem" class="dados btn btn-secondary btn-block" name="imagem" type="file"  accept="image/*" maxlength="60" tabindex="1" value="c:/" />					
                         <a><input type="submit" id="input-imagem" class="btn btn-primary btn-block" value="Salvar Imagem"/></a>
                     </div>
@@ -152,7 +146,7 @@
 					</div>
 					<div class="modal-footer">
 						<input class="btn btn-primary" type="button" data-dismiss="modal" value="Não">
-						<a href="login.jsp"><input type="button" class="btn btn-danger" value="Sim"></a>
+						<input class="btn btn-danger"  type="button" data-dismiss="modal" value="Sim" onclick="location.href = 'FachadaNavegacao?acao=sair';">
 					</div>
 				</div>
 			</div>

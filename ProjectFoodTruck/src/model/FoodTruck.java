@@ -2,9 +2,11 @@ package model;
 
 import java.io.Serializable;
 import java.util.Collection;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +22,7 @@ public class FoodTruck extends BaseEntity implements Serializable, Cloneable {
 	private Double longitude;
 	private Collection<Prato> pratos;
 	private Collection<Local> locais;
+	private Session session;
 	private int avaliacaoPositiva;
 	private int avaliacaoNegativa;
 	private String localImagem;
@@ -165,7 +168,18 @@ public class FoodTruck extends BaseEntity implements Serializable, Cloneable {
 		return this;
 	}
 	
-	
+
+    @OneToOne(mappedBy="foodTruck")
+	public Session getSession() {
+		return session;
+	}
+
+	public FoodTruck setSession(Session session) {
+		this.session = session;
+		return this;
+	}
+
+
 	@Override
 	public FoodTruck clone() {
 		try {
