@@ -40,7 +40,7 @@ public class ControlerPrato extends ControlerBase{
 		return hash;
 	}
 	
-	public Map<String, Object> cadastrar(String hashValor, Double preco, String prato, String descricao){
+	public Map<String, Object> cadastrar(String hashValor, String preco, String prato, String descricao){
 		Map<String, Object> hash = new HashMap<>();
 		
 		try {
@@ -49,14 +49,15 @@ public class ControlerPrato extends ControlerBase{
 			FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());	
 			
 			DaoFactory.getPratoDao().insert(new Prato().setNome(prato)
-													   .setPreco(preco)
+													   .setPreco(Double.parseDouble(preco))
 													   .setDescricao(descricao)
 													   .setFoodTruck(foodTruck)
 						                   );		
 		} catch (Exception e) {
 			hash.put("retorno", "preco");
-			hash.put("mensagem", "Formato do preco invalido");
+			hash.put("mensagem", "Formato do preço inválido");
 			hash.put("prato", prato);
+			hash.put("preco", preco);
 			hash.put("descricaoPrato", descricao);
 		}
 		

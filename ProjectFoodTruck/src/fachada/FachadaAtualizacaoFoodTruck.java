@@ -1,9 +1,6 @@
 package fachada;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 //import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
@@ -22,8 +20,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import controler.ControlerFactory;
-import dao.DaoFactory;
-import model.FoodTruck;
 
 @WebServlet("/FachadaAtualizacaoFoodTruck")
 public class FachadaAtualizacaoFoodTruck extends FachadaBase {
@@ -62,8 +58,9 @@ public class FachadaAtualizacaoFoodTruck extends FachadaBase {
 					String descricao = request.getParameter("descricao");
 					String foodtruck = request.getParameter("foodtruck");
 					String email = request.getParameter("email");
+					String senha = request.getParameter("inputPassword");
 					
-					setarRequest(request, ControlerFactory.getFoodTruckControler().alterar(hashValor, descricao, foodtruck, email));
+					setarRequest(request, ControlerFactory.getFoodTruckControler().alterar(hashValor, descricao, foodtruck, email, senha));
 				}
 				
 				rd = request.getRequestDispatcher("gerenciarFoodTruck.jsp");		

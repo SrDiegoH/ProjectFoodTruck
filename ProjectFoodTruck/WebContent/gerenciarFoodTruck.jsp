@@ -31,6 +31,19 @@
         <script type="text/javascript" src="js/mudaAvaliacao.js"></script>
         <script type="text/javascript" src="js/npm.js"></script>
         <script type="text/javascript" src="js/scriptGeral.js"></script>  
+                
+        <script type="text/javascript" >
+            function confirmarPassWord() {
+                var senha = document.getElementById("inputPassword");
+                var form = document.getElementById("form-atualizacao");
+				form.appendChild(senha);
+				form.submit();
+            }
+            
+            function limparSenha(){
+            	document.getElementById("inputPassword").value = "";
+            }
+        </script>
         
         <%
             String email = (String) request.getAttribute("email");
@@ -42,25 +55,29 @@
             String foodtruck = (String) request.getAttribute("foodtruck");
             foodtruck = foodtruck == null ? "" : foodtruck.trim();
 
-            String confirmada = (String) request.getAttribute("confirmada");
-            confirmada = confirmada == null ? "" : confirmada.trim();
-        %>	
+            String retorno = (String) request.getAttribute("retorno");
+            retorno = retorno == null ? "" : retorno.trim();
+            
+            String mensagem = (String) request.getAttribute("mensagem");
+            mensagem = mensagem == null ? "" : mensagem.trim();
+        %>
+
         <c:choose>
-            <c:when test="${confirmada == 'nao'}">
+            <c:when test="${retorno == 'senha'}">
                 <style type="text/css">
-                    .warning{
-                        display:inline;
-                    }
-                </style>
+                    .alert{
+                        display: inline;
+                    }	      	
+                </style>				
             </c:when>
             <c:otherwise>
                 <style type="text/css">
-                    .warning{
-                        display:none;
+                    .alert{
+                        display: none;
                     }	
                 </style>
             </c:otherwise>
-        </c:choose>	    
+        </c:choose>	
     </head>
     <body>
         <header>
@@ -99,17 +116,17 @@
 
         <div id="skrollr-form">
             <form id="form-atualizacao" action="FachadaAtualizacaoFoodTruck" method="post" style="max-width: 330px; padding: 15px; margin: 0 auto;">
-
+                <div class="alert alert-danger" role="alert" id="alert"><c:out value="${mensagem}"></c:out></div>
                 <br />
                 <br />					
                 <input type="hidden" name="acao" value="atualizar"> 
                 <input type="email" class="form-control" size="20" value="${email}" name="email" placeholder="email" id="email" maxlength="20" aria-describedby="basic-addon1" autofocus="true" required="true" style="border-radius: 4px 4px 0px 0px;">
                 <input type="text" class="form-control" size="20" value="${foodtruck}" name="foodtruck" placeholder="Food Truck" id="foodtruck" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;">				
-                <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" value="" name="descricao" placeholder="Descrição (Não Obrigatório)" id="descricao">${descricao}</textarea>
+                <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" value="" name="descricao" placeholder="Descrição (Não Obrigatório)" id="descricao"><c:out value="${descricao}"></c:out></textarea>
 
                 <br/>	  				 
                 <div id="divBotoes" class="btn-group" role="group" style="display: block;">						
-                    <a><input type="submit" id="input-cadastrar" class="btn btn-primary btn-block" value="Salvar"/></a>
+                    <a><input type="button" id="input-cadastrar" class="btn btn-primary btn-block" value="Salvar" data-toggle="modal" data-target="#divPassword"/></a>
                 </div>
             </form>
             <form action="FachadaAtualizacaoFoodTruck" method="post" enctype="multipart/form-data" style="max-width: 330px; padding: 15px; margin: 0 auto;">
@@ -134,6 +151,23 @@
 					<div class="modal-footer">
 						<input class="btn btn-primary" type="button" data-dismiss="modal" value="Não">
 						<input class="btn btn-danger"  type="button" data-dismiss="modal" value="Sim" onclick="location.href = 'FachadaNavegacao?acao=sair';">
+					</div>
+				</div>
+			</div>
+		</div>
+				
+		<div class="modal fade" role="document" id="divPassword">
+			<div class="modal-dialog modal-dialog-centered" role="document"> 
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4>Digite sua senha</h4>
+					</div>
+					<div class="modal-body">
+						<input type="password" id="inputPassword" name="inputPassword" class="form-control">
+					</div>
+					<div class="modal-footer">
+						<input class="btn btn-primary"  type="button" data-dismiss="modal" value="Confirmar" onclick="confirmarPassWord();limparSenha();">
+						<input class="btn btn-danger" type="button" data-dismiss="modal" value="Cancelar" onclick="limparSenha();">
 					</div>
 				</div>
 			</div>

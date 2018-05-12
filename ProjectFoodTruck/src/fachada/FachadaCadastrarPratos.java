@@ -41,7 +41,7 @@ public class FachadaCadastrarPratos extends FachadaBase {
 
 			if(!ControlerFactory.getSessionControler().isOver(cookie.getValue())) {		
 				if (acao.equalsIgnoreCase("cadastro")){
-					Double preco = Double.parseDouble(request.getParameter("preco").trim().replace(",", "."));	
+					String preco = request.getParameter("preco").trim().replace(",", ".");	
 					String prato = request.getParameter("prato").trim();
 					String descricao = request.getParameter("descricaoPrato");
 					
@@ -49,7 +49,7 @@ public class FachadaCadastrarPratos extends FachadaBase {
 						
 					rd = request.getRequestDispatcher("cadastrarPrato.jsp");
 					rd.forward(request, response);
-				}		
+				}
 			} else {
 				throw new Exception();				
 			}

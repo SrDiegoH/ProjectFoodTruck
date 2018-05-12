@@ -37,7 +37,7 @@ public class ControlerFoodTruck extends ControlerBase {
 			hash.put("mensagem", "A senha atual esta incorreta");
 		} else if(!novaSenha.equals(confirmarNovaSenha)) {
 			hash.put("retorno", "senha");
-			hash.put("mensagem", "As senhas estao diferentes");
+			hash.put("mensagem", "As senhas estão diferentes");
 		} else {
 			String novaSenhaCriptografada = DigestUtils.sha256Hex(novaSenha);
 			foodTruck.setSenha(novaSenhaCriptografada);
@@ -46,20 +46,28 @@ public class ControlerFoodTruck extends ControlerBase {
 		return hash;
 	}
 	
-	public Map<String, Object> alterar(String hashValor, String descricao, String foodtruck, String email){
+	public Map<String, Object> alterar(String hashValor, String descricao, String foodtruck, String email, String senha){
 		Session session = ControlerFactory.getSessionControler().buscarPorHashValor(hashValor);
 		
-		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());		
-				  foodTruck.setDescricao(descricao);
-				  foodTruck.setNome(foodtruck);
-				  foodTruck.setEmail(email);
-			  
-		DaoFactory.getFoodTruckDao().update(foodTruck);
+		FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());
 		
-		Map<String, Object> hash = new HashMap<>();
-							hash.put("email", foodTruck.getEmail());
-							hash.put("descricao", foodTruck.getDescricao());
-							hash.put("foodtruck", foodTruck.getNome());
+	    Map<String, Object> hash = new HashMap<>();
+	    
+		String senhaCriptografada = DigestUtils.sha256Hex(senha);
+		if(!foodTruck.getSenha().equals(senhaCriptografada)) {
+			hash.put("retorno", "senha");
+			hash.put("mensagem", "Senha incorreta");
+		} else {
+			foodTruck.setDescricao(descricao);
+			foodTruck.setNome(foodtruck);
+			foodTruck.setEmail(email);
+			
+			DaoFactory.getFoodTruckDao().update(foodTruck);
+		}
+		
+		hash.put("email", foodTruck.getEmail());
+		hash.put("descricao", foodTruck.getDescricao());
+		hash.put("foodtruck", foodTruck.getNome());
 		
 		return hash;
 	}
@@ -178,7 +186,7 @@ public class ControlerFoodTruck extends ControlerBase {
 			hash.put("longitude", foodTruck.getLongitude());
 		} else {
 			Map<String, String> options = new HashMap<>();
-			                    options.put("mensagem", "Localizacao atualizada");
+			                    options.put("mensagem", "Localização atualizada");
 			                    options.put("retorno", "0");
 			    
             hash.put("json", new Gson().toJson(options));		

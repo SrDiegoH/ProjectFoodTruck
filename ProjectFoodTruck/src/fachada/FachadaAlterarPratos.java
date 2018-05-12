@@ -17,12 +17,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import controler.ControlerFactory;
 import dao.DaoFactory;
+import model.FoodTruck;
 import model.Prato;
 import model.Session;
 
@@ -52,7 +54,7 @@ public class FachadaAlterarPratos extends FachadaBase {
 			}
 	
 			if(!ControlerFactory.getSessionControler().isOver(cookie.getValue())) {
-				if(acao.equalsIgnoreCase("alterar")){			
+				if(acao.equalsIgnoreCase("alterar")) {
 					Map<String, Object> hash = ControlerFactory.getPratoControler().alterar(Integer.parseInt(request.getParameter("id")));
 					
 					setarRequest(request, hash);
@@ -131,24 +133,41 @@ public class FachadaAlterarPratos extends FachadaBase {
 						return;
 					} else if (acao.equalsIgnoreCase("alterar")){
 						try {
-							double preco = Double.parseDouble(request.getParameter("preco").trim().replace(",", "."));
-							
+							String senha = request.getParameter("inputPassword");
+							FoodTruck foodTruck = DaoFactory.getFoodTruckDao().find(session.getFoodTruck().getId());
 							Prato prato = DaoFactory.getPratoDao().find(Integer.parseInt(request.getParameter("id")));
-								  prato.setNome(request.getParameter("prato").trim());
-							      prato.setDescricao(request.getParameter("descricaoPrato"));
-							      prato.setPreco(preco);
-							      
-							DaoFactory.getPratoDao().update(prato);
-														
-							request.setAttribute("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(session.getFoodTruck().getId()));
 							
-							rd = request.getRequestDispatcher("buscarPrato.jsp");
+							String senhaCriptografada = DigestUtils.sha256Hex(senha);
+							if(!foodTruck.getSenha().equals(senhaCriptografada)) {
+								request.setAttribute("retorno", "erro");
+								request.setAttribute("mensagem", "Senha incorreta");
+			
+								request.setAttribute("id", prato.getId());
+								request.setAttribute("prato", prato.getNome());
+								request.setAttribute("preco", prato.getPreco().toString());
+								request.setAttribute("descricaoPrato", prato.getDescricao());
+								
+								rd = request.getRequestDispatcher("alterarPrato.jsp");
+							} else {
+								double preco = Double.parseDouble(request.getParameter("preco").trim().replace(",", "."));
+								
+							    prato.setNome(request.getParameter("prato").trim());
+						        prato.setDescricao(request.getParameter("descricaoPrato"));
+						        prato.setPreco(preco);
+								      
+								DaoFactory.getPratoDao().update(prato);
+															
+								request.setAttribute("arrayPratos", DaoFactory.getPratoDao().filtrarPorFoodTruck(session.getFoodTruck().getId()));
+								
+								rd = request.getRequestDispatcher("buscarPrato.jsp");
+							}
 						} catch (Exception e) {
-							request.setAttribute("retorno", "preco");
-							request.setAttribute("mensagem", "Formato do preco invalido");
+							request.setAttribute("retorno", "erro");
+							request.setAttribute("mensagem", "Formato do preço inválido");
 		
 							request.setAttribute("id", Integer.parseInt(request.getParameter("id")));
 							request.setAttribute("prato", request.getParameter("prato"));
+							request.setAttribute("preco", request.getParameter("preco"));
 							request.setAttribute("descricaoPrato", request.getParameter("descricaoPrato"));
 							
 							rd = request.getRequestDispatcher("alterarPrato.jsp");

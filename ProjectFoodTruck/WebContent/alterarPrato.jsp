@@ -32,6 +32,19 @@
         <script type="text/javascript" src="js/npm.js"></script>
         <script type="text/javascript" src="js/scriptGeral.js"></script> 
         
+        <script type="text/javascript" >
+            function confirmarPassWord() {
+                var senha = document.getElementById("inputPassword");
+                var form = document.getElementById("form-cadastrar-prato");
+				form.appendChild(senha);
+				form.submit();
+            }
+            
+            function limparSenha(){
+            	document.getElementById("inputPassword").value = "";
+            }
+        </script>
+        
         <%
             String retorno = (String) request.getAttribute("retorno");
             retorno = retorno == null ? "" : retorno.trim();
@@ -53,7 +66,7 @@
         %>
 
         <c:choose>
-            <c:when test="${retorno == 'preco'}">
+            <c:when test="${retorno == 'erro'}">
                 <style type="text/css">
                     .alert{
                         display: inline;
@@ -118,7 +131,7 @@
                     <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" name="descricaoPrato" placeholder="Descrição (Não Obrigatório)" id="descricaoPrato"><c:out value="${descricaoPrato}"></c:out></textarea>
                     <br/>
                     <div class="btn-toolbar" role="toolbar" aria-label="..." style="display: block;">
-                        <a><input type="submit" id="input-cadastrar" class="btn btn-primary btn-block" value="Salvar"/></a>
+                        <a><input type="button" id="input-cadastrar" class="btn btn-primary btn-block" value="Salvar" data-toggle="modal" data-target="#divPassword"/></a>
                         <a href="FachadaNavegacao?acao=buscarPrato"><input type="button" class="btn btn-danger btn-block" value="Cancelar" /></a>
                     </div>					  
                 </form>
@@ -151,5 +164,22 @@
 				</div>
 			</div>
 		</div>  
+				
+		<div class="modal fade" role="document" id="divPassword">
+			<div class="modal-dialog modal-dialog-centered" role="document"> 
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4>Digite sua senha</h4>
+					</div>
+					<div class="modal-body">
+						<input type="password" id="inputPassword" name="inputPassword" class="form-control">
+					</div>
+					<div class="modal-footer">
+						<input class="btn btn-primary"  type="button" data-dismiss="modal" value="Confirmar" onclick="confirmarPassWord();limparSenha();">
+						<input class="btn btn-danger" type="button" data-dismiss="modal" value="Cancelar" onclick="limparSenha();">
+					</div>
+				</div>
+			</div>
+		</div>
     </body>
 </html>
