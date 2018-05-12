@@ -85,7 +85,7 @@
     <body>
         <div id="skrollr-body">
             <header>
-                <h1 style="font-family: cursive;color: #DAB400;"><a href="index.html"><img src="imagens/logo.png" style="width: 25%;"></a> Food Tracking</h1>
+                <h1 style="font-family: cursive;color: #DAB400;"><a data-toggle="modal" data-target="#divConfirm" style="font-family: cursive;color: #DAB400;"><img src="imagens/logo.png" style="width: 25%;"></a> Food Tracking</h1>
             </header>
 
 			<div class="mobile desktop-hide">

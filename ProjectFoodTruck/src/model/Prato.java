@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import util.CriptoHelper;
+
 @Entity
 @Table(name="prato")
 public class Prato extends BaseEntity implements Serializable, Cloneable {
