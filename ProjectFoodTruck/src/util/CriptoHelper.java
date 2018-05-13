@@ -15,7 +15,7 @@ public class CriptoHelper {
         return cripto.encodeToString(puroTexto.getBytes());
 	}
 	
-	public static String decriptorafar(String cifroTexto){
+	public static String descriptorafar(String cifroTexto){
         return new String(cripto.decode(cifroTexto.getBytes()));
 	}		
 }
