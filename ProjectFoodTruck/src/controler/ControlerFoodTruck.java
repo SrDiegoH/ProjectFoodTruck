@@ -34,10 +34,16 @@ public class ControlerFoodTruck extends ControlerBase {
 		String senhaAtualCriptografada = DigestUtils.sha256Hex(senhaAtual);
 		if(!foodTruck.getSenha().equals(senhaAtualCriptografada)) {
 			hash.put("retorno", "senha");
-			hash.put("mensagem", "A senha atual esta incorreta");
+			hash.put("mensagem", "A senha atual esta incorreta.");
+		} else if(!(novaSenha.length() >= 8 && novaSenha.length() <= 12)){
+			hash.put("retorno", "senha");
+			hash.put("mensagem", "A senha deve ter entre 8 a 12 caracteres.");
+		} else if(!(novaSenha.matches(".*[a-zA-Z].*") && novaSenha.matches(".*[0-9].*"))){
+			hash.put("retorno", "senha");
+			hash.put("mensagem", "A senha deve conter letras e números.");
 		} else if(!novaSenha.equals(confirmarNovaSenha)) {
 			hash.put("retorno", "senha");
-			hash.put("mensagem", "As senhas estão diferentes");
+			hash.put("mensagem", "As senhas são diferentes.");
 		} else {
 			String novaSenhaCriptografada = DigestUtils.sha256Hex(novaSenha);
 			foodTruck.setSenha(novaSenhaCriptografada);
@@ -211,7 +217,7 @@ public class ControlerFoodTruck extends ControlerBase {
 					hash.put("hash", session.getHashValor());
 					hash.put("prazo", session.getPrazo());
 				} else
-					throw new Exception("Sua Conta ainda nao foi confirmada.");
+					throw new Exception("Sua conta ainda não foi confirmada.");
 			} else
 				throw new Exception("Email ou senha incorretos.");
 		} catch (Exception e){

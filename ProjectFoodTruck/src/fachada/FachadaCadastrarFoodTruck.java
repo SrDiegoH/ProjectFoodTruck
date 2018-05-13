@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,6 +13,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import controler.ControlerFactory;
 
 @WebServlet("/FachadaCadastrarFoodTruck")
@@ -81,6 +83,12 @@ public class FachadaCadastrarFoodTruck extends FachadaBase {
 
 		if(ControlerFactory.getFoodTruckControler().existeEmail(email)){
 			retornaMensagemErro(request, rd, "O email ja foi cadastrado.", "email", hashMap);
+			rd = request.getRequestDispatcher("cadastrarFoodTruck.jsp");
+		} else if(!(senha.length() >= 8 && senha.length() <= 12)){
+			retornaMensagemErro(request, rd, "A senha deve ter entre 8 a 12 caracteres.", "senha", hashMap);
+			rd = request.getRequestDispatcher("cadastrarFoodTruck.jsp");
+		} else if(!(senha.matches(".*[a-zA-Z].*") && senha.matches(".*[0-9].*"))){
+			retornaMensagemErro(request, rd, "A senha deve conter letras e números.", "senha", hashMap);
 			rd = request.getRequestDispatcher("cadastrarFoodTruck.jsp");
 		} else if(!senha.equals(senha2)){
 			retornaMensagemErro(request, rd, "As senhas sao diferentes.", "senha", hashMap);

@@ -111,7 +111,7 @@
                     <input type="hidden" name="acao" value="cadastro"/>
                     <input type="text" class="form-control" size="20" value="${prato}" name="prato" placeholder="Nome do prato" id="prato" maxlength="100" aria-describedby="basic-addon1" autofocus="true" required="true" style="border-radius: 4px 4px 0px 0px;"/>
                     <input type="number" class="form-control" size="20" value="${preco}" name="preco" placeholder="Preço" id="preco" maxlength="100" aria-describedby="basic-addon1" required="true" step="any" style="border-radius: 0px 0px 0px 0px;"/>
-                    <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" name="descricaoPrato" placeholder="Descrição (Não Obrigatório)" id="descricaoPrato"><c:out value="${descricaoPrato}"></c:out></textarea>
+                    <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" name="descricaoPrato" placeholder="Descrição (Não Obrigatório)" id="descricaoPrato"  maxlength="500"><c:out value="${descricaoPrato}"></c:out></textarea>
                     <br/>
                     <div class="btn-toolbar" role="toolbar" aria-label="..." style="display: block;">					
                         <a><input type="submit" id="input-cadastrar" class="btn btn-primary btn-block" value="Cadastrar"/></a>

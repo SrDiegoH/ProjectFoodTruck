@@ -120,9 +120,9 @@
                 <br />
                 <br />					
                 <input type="hidden" name="acao" value="atualizar"> 
-                <input type="email" class="form-control" size="20" value="${email}" name="email" placeholder="email" id="email" maxlength="20" aria-describedby="basic-addon1" autofocus="true" required="true" style="border-radius: 4px 4px 0px 0px;">
-                <input type="text" class="form-control" size="20" value="${foodtruck}" name="foodtruck" placeholder="Food Truck" id="foodtruck" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;">				
-                <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" value="" name="descricao" placeholder="Descrição (Não Obrigatório)" id="descricao"><c:out value="${descricao}"></c:out></textarea>
+                <input type="email" class="form-control" size="20" value="${email}" name="email" placeholder="email" id="email" maxlength="100" aria-describedby="basic-addon1" autofocus="true" required="true" style="border-radius: 4px 4px 0px 0px;">
+                <input type="text" class="form-control" size="20" value="${foodtruck}" name="foodtruck" placeholder="Food Truck" id="foodtruck" maxlength="100" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;">				
+                <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" value="" name="descricao" placeholder="Descrição (Não Obrigatório)" id="descricao" maxlength="500" ><c:out value="${descricao}"></c:out></textarea>
 
                 <br/>	  				 
                 <div id="divBotoes" class="btn-group" role="group" style="display: block;">						

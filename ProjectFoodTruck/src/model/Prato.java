@@ -1,13 +1,12 @@
 package model;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import util.CriptoHelper;
 
 @Entity
 @Table(name="prato")

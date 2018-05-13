@@ -106,9 +106,9 @@
                     <br />
                     <br />					
                     <input type="hidden" name="acao" value="alterar"> 
-                    <input type="password" class="form-control" size="20" name="senhaAtual" placeholder="Senha atual" id="senhaAtual" aria-describedby="basic-addon1" required="true" style="border-radius: 4px 4px 0px 0px;">
-                    <input type="password" class="form-control" size="20" name="novaSenha" placeholder="Nova senha" id="senha" aria-describedby="basic-addon1" required="true" style="border-radius: 0px 0px 0px 0px;">
-                    <input type="password" class="form-control"  size="20" name="confirmarNovaSenha" placeholder="Confirme a nova senha" id="confirmarSenha" aria-describedby="basic-addon1" required="true" style="border-radius: 0px 0px 4px 4px;">
+                    <input type="password" class="form-control" size="20" maxlength="100" name="senhaAtual" placeholder="Senha atual" id="senhaAtual" aria-describedby="basic-addon1" required="true" style="border-radius: 4px 4px 0px 0px;">
+                    <input type="password" class="form-control" size="20" maxlength="100" name="novaSenha" placeholder="Nova senha (8 a 12 caracteres, com letras e números)" id="senha" aria-describedby="basic-addon1" required="true" style="border-radius: 0px 0px 0px 0px;">
+                    <input type="password" class="form-control"  size="20" maxlength="100" name="confirmarNovaSenha" placeholder="Confirme a nova senha" id="confirmarSenha" aria-describedby="basic-addon1" required="true" style="border-radius: 0px 0px 4px 4px;">
                     <br/>	  				 
                     <div class="btn-toolbar" role="toolbar" aria-label="..." style="display: block;">				
                         <a><input type="submit" id="input-alterar" class="btn btn-primary btn-block" value="Salvar"/></a>

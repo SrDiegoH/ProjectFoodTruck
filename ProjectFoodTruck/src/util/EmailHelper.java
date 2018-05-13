@@ -24,7 +24,7 @@ public class EmailHelper {
 												 .append("Seja bem vindo ao Localizador de FoodTruck.")
 												 .append("<br/>")
 												 .append("<br/>")
-												 .append("Por favor confirme o seu email clicando <b><a href='")
+												 .append("Por favor confirme o seu e-mail clicando <b><a href='")
 												 .append(ENDERECO)
 												 .append("/ProjectFoodTruck/FachadaCadastrarFoodTruck?id=")													   
 												 .append(codigo) //inves do id usar um codigo gerado aleatorimente

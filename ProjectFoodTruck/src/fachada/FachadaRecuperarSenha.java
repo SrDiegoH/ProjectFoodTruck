@@ -31,7 +31,7 @@ public class FachadaRecuperarSenha extends FachadaBase {
 
 		if(ControlerFactory.getFoodTruckControler().existeEmail(email)){
 			ControlerFactory.getFoodTruckControler().enviarNovaSenhaPorEmail(email);
-			hash.put("mensagem", "Nova Senha enviada para o e-mail.");
+			hash.put("mensagem", "Nova senha enviada para o e-mail.");
 			rd = request.getRequestDispatcher("login.jsp");
 		} else {
 			hash.put("mensagem", "E-mail nao existe.");			

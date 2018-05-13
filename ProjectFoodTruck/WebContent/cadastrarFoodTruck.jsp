@@ -82,9 +82,9 @@
                     <input type="hidden" name="acao" value="cadastro" />
                     <input type="email" class="form-control" size="20" value="${email}" name="email" placeholder="E-Mail" id="email" maxlength="100" aria-describedby="basic-addon1" autofocus="true" required="true" style="border-radius: 4px 4px 0px 0px;"/>
                     <input type="text" class="form-control" size="20" value="${foodtruck}" name="foodtruck" placeholder="Nome da franquia" id="foodtruck" maxlength="100" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;"/>
-                    <input type="password" class="form-control" size="20" name="senha" placeholder="Senha" id="senha" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;">
-                    <input type="password" class="form-control"  size="20" name="confirmarSenha" placeholder="Confirmar senha" id="confirmarSenha" aria-describedby="basic-addon1" required="true" style="border-radius: 0px 0px 0px 0px;">
-                    <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" value="${descricao}"  name="descricao" placeholder="Descrição (Não Obrigatório)" id="descricao"></textarea>
+                    <input type="password" class="form-control" size="20" name="senha" placeholder="Senha (8 a 12 caracteres, com letras e números)" id="senha" maxlength="100" aria-describedby="basic-addon1"  required="true" style="border-radius: 0px 0px 0px 0px;">
+                    <input type="password" class="form-control"  size="20" name="confirmarSenha" placeholder="Confirmar senha" id="confirmarSenha" maxlength="100" aria-describedby="basic-addon1" required="true" style="border-radius: 0px 0px 0px 0px;">
+                    <textarea style="resize: none;border-radius: 0px 0px 4px 4px;" class="form-control" rows="5" value="${descricao}"  name="descricao" placeholder="Descrição (Não Obrigatório)" id="descricao" maxlength="500" ></textarea>
                     <br/>
                     <div class="btn-toolbar" role="toolbar" aria-label="..." style="display: block;">					
                         <a><input type="submit" id="input-cadastrar" value="Cadastrar" class="btn btn-primary btn-block"/> </a>

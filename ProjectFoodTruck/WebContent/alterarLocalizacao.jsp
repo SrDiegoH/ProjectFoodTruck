@@ -190,7 +190,7 @@
 						<h4>Digite o nome do local</h4>
 					</div>
 					<div class="modal-body">
-						<input type="text" id="inputFavorito"  class="form-control">
+						<input type="text" id="inputFavorito"  class="form-control" maxlength="100">
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-primary" onClick="pegarLocalizacao()" value="Adicionar">
