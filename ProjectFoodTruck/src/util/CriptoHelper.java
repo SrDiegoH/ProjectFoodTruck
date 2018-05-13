@@ -26,12 +26,25 @@ public class CriptoHelper {
 			cripto = new Base64();
 	}
 
-	public static String criptorafar(String puroTexto) {
+	public static String criptografar(String puroTexto) {
 		return cripto.encodeToString(puroTexto.getBytes());
 	}
 
-	public static String descriptorafar(String cifroTexto) {
+	public static String descriptografar(String cifroTexto) {
 		return new String(cripto.decode(cifroTexto.getBytes()));
+	}
+	
+	public static void main(String[] args) throws Exception {
+		String puroTexto = "Este é o puro texto";	
+		System.out.println("Texto: " + puroTexto);
+		
+		System.out.print("Criptografar: ");
+		String cifroTexto = CriptoHelper.criptografar(puroTexto);
+		System.out.println(cifroTexto.toString());
+		
+		System.out.print("Decriptografar: ");
+		String novoPuroTexto = CriptoHelper.descriptografar(cifroTexto);
+		System.out.println(novoPuroTexto);
 	}
 	
 	
