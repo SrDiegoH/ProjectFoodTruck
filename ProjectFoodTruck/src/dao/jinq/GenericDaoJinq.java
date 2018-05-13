@@ -3,6 +3,8 @@ package dao.jinq;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -26,17 +28,20 @@ public class GenericDaoJinq<Entity extends BaseEntity> implements IDao<Entity> {
 	
 	@Override
 	public void insert(final Entity entity) {
-		executeNoResult(manager -> manager.persist(entity));
+		executeNoResult(manager -> manager.persist(entity.criptografar()));
+		entity.descriptografar();
 	}
 
 	@Override
 	public void update(final Entity entity) {
-		executeNoResult(manager -> manager.merge(entity));
+		executeNoResult(manager -> manager.merge(entity.criptografar()));
+		entity.descriptografar();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Entity find(final int id) {
-		return execute(manager -> manager.find(entityClass, id));
+		return (Entity) execute(manager -> manager.find(entityClass, id)).descriptografar();
 	}
 	
 	@Override
@@ -83,7 +88,7 @@ public class GenericDaoJinq<Entity extends BaseEntity> implements IDao<Entity> {
 	
 	@Override
 	public List<Entity> retrieve() {
-		return retrieve(entity -> true);
+		return retrieve(entity -> true).stream().map(mapper -> (Entity) mapper.descriptografar()).collect(Collectors.toList());
 	}
 	
 	protected JinqStream<Entity> getStream() {

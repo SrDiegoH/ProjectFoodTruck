@@ -133,7 +133,6 @@ public class CriptoHelper {
 		
 		public static void main(String[] args) throws Exception {
 			String puroTexto = "Este é o puro texto";
-
 			
 			KeyPair parChaves = CifraAssimetrica.gerarParChaves("CHAVE");
 			

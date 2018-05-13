@@ -23,4 +23,13 @@ public abstract class BaseEntity implements Serializable {
 		this.id = id;
 		return this;
 	}
+	
+
+	public BaseEntity criptografar() {
+		return this;
+	}
+
+	public BaseEntity descriptografar() {
+		return this;
+	}
 }

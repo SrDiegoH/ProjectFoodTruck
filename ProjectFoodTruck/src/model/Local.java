@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -65,7 +66,7 @@ public class Local extends BaseEntity implements Serializable, Cloneable {
 		this.foodTruck = foodTruck;
 		return this;
 	}
-	
+
 	
 	@Override
 	public Local clone() {

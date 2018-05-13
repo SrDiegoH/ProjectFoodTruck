@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import util.CriptoHelper;
+
 @Entity
 @Table(name="foodTruck")
 public class FoodTruck extends BaseEntity implements Serializable, Cloneable {
@@ -176,6 +178,23 @@ public class FoodTruck extends BaseEntity implements Serializable, Cloneable {
 
 	public FoodTruck setSession(Session session) {
 		this.session = session;
+		return this;
+	}
+	
+	
+	@Override
+	public FoodTruck criptografar() {
+		this.email = CriptoHelper.criptografar(this.email);
+		this.nome = CriptoHelper.criptografar(this.nome);
+		this.descricao = CriptoHelper.criptografar(this.descricao);
+		return this;
+	}
+
+	@Override
+	public FoodTruck descriptografar() {
+		this.email = CriptoHelper.descriptografar(this.email);
+		this.nome = CriptoHelper.descriptografar(this.nome);
+		this.descricao = CriptoHelper.descriptografar(this.descricao);
 		return this;
 	}
 

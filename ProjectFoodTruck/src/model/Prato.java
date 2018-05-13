@@ -8,6 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import util.CriptoHelper;
+
 @Entity
 @Table(name="prato")
 public class Prato extends BaseEntity implements Serializable, Cloneable {
@@ -98,6 +100,21 @@ public class Prato extends BaseEntity implements Serializable, Cloneable {
 		this.avaliacaoNegativa = avaliacaoNegativa;
 	}
 
+
+	@Override
+	public Prato criptografar() {
+		this.nome = CriptoHelper.criptografar(this.nome);
+		this.descricao = CriptoHelper.criptografar(this.descricao);
+		return this;
+	}
+
+	@Override
+	public Prato descriptografar() {
+		this.nome = CriptoHelper.descriptografar(this.nome);
+		this.descricao = CriptoHelper.descriptografar(this.descricao);
+		return this;
+	}
+	
 	
 	@Override
 	public Prato clone() {

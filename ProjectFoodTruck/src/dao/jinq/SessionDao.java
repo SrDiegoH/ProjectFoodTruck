@@ -29,7 +29,7 @@ public class SessionDao extends GenericDaoJinq<Session> implements ISessionDao {
 		try {
 			return getStream().where(f -> f.getFoodTruck().getId() == foodTruck.getId())
 					          .select(p -> p)
-					          .getOnlyValue();			
+					          .getOnlyValue();
 		} catch (NoSuchElementException e) {
 			System.err.println("Nenhum item encontrado");
 		}

@@ -36,7 +36,7 @@ public class ControlerLocal extends ControlerBase {
 	public Map<String, Object> atualizarLocal(Integer id){
 		Local local = DaoFactory.getLocalDao().find(id);
 		
-		FoodTruck foodTruck = local.getFoodTruck();
+		FoodTruck foodTruck = local.getFoodTruck().descriptografar();
 				  foodTruck.setLatitude(local.getLatitude());
 				  foodTruck.setLongitude(local.getLongitude());
 
@@ -51,7 +51,7 @@ public class ControlerLocal extends ControlerBase {
 		return hash;
 	}	
 	
-	public Map<String, Object> excluir (Integer id){
+	public Map<String, Object> excluir(Integer id){
 		Local local = DaoFactory.getLocalDao().find(id);
 		
 		DaoFactory.getLocalDao().delete(id);

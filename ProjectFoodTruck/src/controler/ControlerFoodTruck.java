@@ -154,7 +154,7 @@ public class ControlerFoodTruck extends ControlerBase {
 				  foodTruck.setLocalImagem(retorno);
 		
 		DaoFactory.getFoodTruckDao().update(foodTruck);
-
+		
 		Map<String, Object> hash = new HashMap<>();		
 							hash.put("email", foodTruck.getEmail());
 							hash.put("descricao", foodTruck.getDescricao());
@@ -181,7 +181,6 @@ public class ControlerFoodTruck extends ControlerBase {
 			  	  foodTruck.setLongitude(longitude);
 	
 		DaoFactory.getFoodTruckDao().update(foodTruck);
-		
 		
 		Map<String, Object> hash = new HashMap<>();		
 				
