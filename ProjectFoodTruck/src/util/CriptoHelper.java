@@ -18,20 +18,22 @@ import javax.crypto.SecretKey;
 
 import org.apache.commons.codec.binary.Base64;
 
-public class CriptoHelper {
-	private static Base64 cripto;
-
-	static {
-		if (cripto == null)
-			cripto = new Base64();
-	}
+public class CriptoHelper {	
 
 	public static String criptografar(String puroTexto) {
-		return cripto.encodeToString(puroTexto.getBytes());
+		try {
+			return CifraSimetrica.criptografar(puroTexto, "CHAVE");
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public static String descriptografar(String cifroTexto) {
-		return new String(cripto.decode(cifroTexto.getBytes()));
+		try {
+			return CifraSimetrica.descriptografar(cifroTexto, "CHAVE");
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -47,12 +49,42 @@ public class CriptoHelper {
 		System.out.println(novoPuroTexto);
 	}
 	
+	public static class CifraBase64 {
+		private static Base64 cripto;
+		
+		static {
+			if (cripto == null)
+				cripto = new Base64();
+		}
+
+		public static String criptografar(String puroTexto) {
+			return cripto.encodeToString(puroTexto.getBytes());
+		}
+
+		public static String descriptografar(String cifroTexto) {
+			return new String(cripto.decode(cifroTexto.getBytes()));
+		}
+		
+		public static void main(String[] args) throws Exception {
+			String puroTexto = "Este é o puro texto";	
+			System.out.println("Texto: " + puroTexto);
+			
+			System.out.print("Criptografar: ");
+			String cifroTexto = CifraBase64.criptografar(puroTexto);
+			System.out.println(cifroTexto.toString());
+			
+			System.out.print("Decriptografar: ");
+			String novoPuroTexto = CifraBase64.descriptografar(cifroTexto);
+			System.out.println(novoPuroTexto);
+		}
+	}
+	
 	
 	public static class CifraSimetrica {
 		//https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
 		private static final String ALGORITIMO = "RC4"; //"AES";
 		
-		public static byte[] criptografar(String puroTexto, String chave) throws Exception {
+		public static String criptografar(String puroTexto, String chave) throws Exception {
 			//pegar chave
 			SecureRandom sr = new SecureRandom(chave.getBytes());
 			
@@ -65,12 +97,25 @@ public class CriptoHelper {
 			Cipher cifra = Cipher.getInstance(ALGORITIMO);
 	               cifra.init(Cipher.ENCRYPT_MODE, chaveSecreta);
 	
-			byte[] cifroTexto = cifra.doFinal(puroTexto.getBytes());
-	
+			byte[] arrBytes = cifra.doFinal(puroTexto.getBytes());
+			
+			//tranformar array de bytes em um bloco de texto
+			String cifroTexto = "";
+			for (byte b : arrBytes) {
+				cifroTexto += b + "|";
+			}
+			cifroTexto = cifroTexto.substring(0, cifroTexto.length() -1);
 			return cifroTexto;
 		}
 	
-		public static String descriptografar(byte[] cifroTexto, String chave) throws Exception {
+		public static String descriptografar(String cifroTexto, String chave) throws Exception {
+			//transformar bloco de texto em array de bytes
+			String [] arrString = cifroTexto.split("\\|");
+			byte[] arrBytes = new byte[arrString.length];
+			for (int i = 0; i < arrString.length; i++) {
+				arrBytes[i] = Byte.parseByte(arrString[i]);
+			}
+			
 			//pegar chave
 			SecureRandom sr = new SecureRandom(chave.getBytes());
 			
@@ -83,7 +128,7 @@ public class CriptoHelper {
 			Cipher cifra = Cipher.getInstance(ALGORITIMO);
 				   cifra.init(Cipher.DECRYPT_MODE, chaveSecreta);
 			
-			byte[] descriptografar = cifra.doFinal(cifroTexto);
+			byte[] descriptografar = cifra.doFinal(arrBytes);
 	
 			return new String(descriptografar);
 		}
@@ -93,7 +138,7 @@ public class CriptoHelper {
 			System.out.println("Texto: " + puroTexto);
 			
 			System.out.print("Criptografar: ");
-			byte[] cifroTexto = CifraSimetrica.criptografar(puroTexto, "CHAVE");
+			String cifroTexto = CifraSimetrica.criptografar(puroTexto, "CHAVE");
 			System.out.println(cifroTexto.toString());
 			
 			System.out.print("Decriptografar: ");

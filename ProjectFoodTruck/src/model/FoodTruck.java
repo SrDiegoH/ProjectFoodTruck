@@ -78,7 +78,7 @@ public class FoodTruck extends BaseEntity implements Serializable, Cloneable {
 	}
 
 	
-	@Column(length = 500, nullable = false)
+	@Column(length = 500, nullable = true)
 	public String getDescricao() {
 		return descricao;
 	}
