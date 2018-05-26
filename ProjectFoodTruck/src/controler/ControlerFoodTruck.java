@@ -35,12 +35,12 @@ public class ControlerFoodTruck extends ControlerBase {
 		if(!foodTruck.getSenha().equals(senhaAtualCriptografada)) {
 			hash.put("retorno", "senha");
 			hash.put("mensagem", "A senha atual esta incorreta.");
-		} else if(!(novaSenha.length() >= 8 && novaSenha.length() <= 12)){
+		} else if(!(novaSenha.length() >= 8 && novaSenha.length() <= 16)){
 			hash.put("retorno", "senha");
-			hash.put("mensagem", "A senha deve ter entre 8 a 12 caracteres.");
-		} else if(!(novaSenha.matches(".*[a-zA-Z].*") && novaSenha.matches(".*[0-9].*"))){
+			hash.put("mensagem", "A senha deve ter entre 8 a 16 caracteres.");
+		} else if(!(novaSenha.matches(".*[a-z].*") && novaSenha.matches(".*[A-Z].*") && novaSenha.matches(".*[0-9].*"))){
 			hash.put("retorno", "senha");
-			hash.put("mensagem", "A senha deve conter letras e números.");
+			hash.put("mensagem", "A senha deve conter letras maiúsculas, minúsculas e números.");
 		} else if(!novaSenha.equals(confirmarNovaSenha)) {
 			hash.put("retorno", "senha");
 			hash.put("mensagem", "As senhas são diferentes.");

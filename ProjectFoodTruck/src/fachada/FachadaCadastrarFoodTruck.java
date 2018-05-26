@@ -84,11 +84,11 @@ public class FachadaCadastrarFoodTruck extends FachadaBase {
 		if(ControlerFactory.getFoodTruckControler().existeEmail(email)){
 			retornaMensagemErro(request, rd, "O email ja foi cadastrado.", "email", hashMap);
 			rd = request.getRequestDispatcher("cadastrarFoodTruck.jsp");
-		} else if(!(senha.length() >= 8 && senha.length() <= 12)){
-			retornaMensagemErro(request, rd, "A senha deve ter entre 8 a 12 caracteres.", "senha", hashMap);
+		} else if(!(senha.length() >= 8 && senha.length() <= 16)){
+			retornaMensagemErro(request, rd, "A senha deve ter entre 8 a 16 caracteres.", "senha", hashMap);
 			rd = request.getRequestDispatcher("cadastrarFoodTruck.jsp");
-		} else if(!(senha.matches(".*[a-zA-Z].*") && senha.matches(".*[0-9].*"))){
-			retornaMensagemErro(request, rd, "A senha deve conter letras e números.", "senha", hashMap);
+		} else if(!(senha.matches(".*[a-z].*") && senha.matches(".*[A-Z].*") && senha.matches(".*[0-9].*"))){
+			retornaMensagemErro(request, rd, "A senha deve conter letras maiúsculas, minúsculas e números.", "senha", hashMap);
 			rd = request.getRequestDispatcher("cadastrarFoodTruck.jsp");
 		} else if(!senha.equals(senha2)){
 			retornaMensagemErro(request, rd, "As senhas sao diferentes.", "senha", hashMap);
