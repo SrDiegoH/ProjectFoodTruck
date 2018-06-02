@@ -114,7 +114,7 @@ public class CriptoHelper {
 
 	public static class CifraSimetrica {
 		// https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#Cipher
-		private static final String ALGORITIMO = "RC4"; // "AES";
+		private static final String ALGORITIMO = "AES"; // AES RC4
 
 		public static String criptografar(String puroTexto, String chave) throws Exception {
 			// pegar chave
