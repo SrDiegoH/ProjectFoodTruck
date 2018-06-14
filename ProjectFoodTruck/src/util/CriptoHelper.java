@@ -132,21 +132,28 @@ public class CriptoHelper {
 			byte[] arrBytes = cifra.doFinal(puroTexto.getBytes());
 
 			// tranformar array de bytes em um bloco de texto
-			String cifroTexto = "";
-			for (byte b : arrBytes) {
-				cifroTexto += b + "|";
+			StringBuffer cifroTexto = new StringBuffer();
+			
+			for (byte cipherTextByte : arrBytes) {
+				cifroTexto.append(String.format("%02X", 0xFF & cipherTextByte));
 			}
-			cifroTexto = cifroTexto.substring(0, cifroTexto.length() - 1);
-			return cifroTexto;
+			
+			return cifroTexto.toString();
 		}
 
 		public static String descriptografar(String cifroTexto, String chave) throws Exception {
-			// transformar bloco de texto em array de bytes
-			String[] arrString = cifroTexto.split("\\|");
-			byte[] arrBytes = new byte[arrString.length];
-			for (int i = 0; i < arrString.length; i++) {
-				arrBytes[i] = Byte.parseByte(arrString[i]);
-			}
+			byte [] cipherTextInBytes = new byte[cifroTexto.length()/2];
+			
+		    char [] cipherTextToCharArray = cifroTexto.toCharArray();
+		    
+		    StringBuffer currentChar;
+		    
+		    for (int i = 0; i < cipherTextToCharArray.length; i += 2) {
+		        currentChar = new StringBuffer(2);
+		        currentChar.append(cipherTextToCharArray[i]).append(cipherTextToCharArray[i + 1]);
+		        
+		        cipherTextInBytes[i/2] = (byte) Long.parseLong(currentChar.toString(), 16);
+		    }
 
 			// pegar chave
 			SecureRandom sr = new SecureRandom(chave.getBytes());
@@ -160,7 +167,7 @@ public class CriptoHelper {
 			Cipher cifra = Cipher.getInstance(ALGORITIMO);
 			cifra.init(Cipher.DECRYPT_MODE, chaveSecreta);
 
-			byte[] descriptografar = cifra.doFinal(arrBytes);
+			byte[] descriptografar = cifra.doFinal(cipherTextInBytes);
 
 			return new String(descriptografar);
 		}
